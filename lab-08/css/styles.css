@@ -1,0 +1,40 @@
+/* custom CSS rules */
+
+/* display none for layout but be careful of license restrictions */
+.mapbox-logo, .leaflet-control-attribution {
+  display: none; 
+}
+.legend-large, .legend-small {
+    border-radius: 50%;
+}
+
+hr.small, hr.large {
+    width: 53px;
+    position: absolute;
+    top: -8px;
+    left: 25px;
+    border: 1px dashed #ccc;      
+    margin-top: 8px;             
+}
+
+.boys {
+    color: #0655d3;
+}
+
+.girls {
+    color: #f4f731;
+}
+
+.filter {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 480px;
+  font-size: 1.3em;
+}
+
+#info,
+#categorie,
+.filter {
+  z-index: 1000;
+}
