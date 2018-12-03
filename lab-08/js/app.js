@@ -17,23 +17,17 @@
     id: 'mapbox.light',
     accessToken: accessToken
   }).addTo(map);
-
-  //use omnivore to load geojson data
-  //omnivore.geojson('data/geozones_G8.geojson').addTo(map);
-  //omnivore.csv('data/G1_Census2011.csv').addTo(map);
-  //omnivore.csv('data/G2_Census2011.csv').addTo(map);
-  //omnivore.csv('data/G3_Census2011.csv').addTo(map);
   
   var dataG1 = 'data/G1_Census2011.csv',
       dataG2 = 'data/G2_Census2011.csv',
       dataG3 = 'data/G3_Census2011.csv',
       dataG8 = 'data/G8_Census2011.csv'
  
-  var mapTypes = ["G1 - Population by geozone, age and sex",
-                  "G2 - Native-born and foreign-born population by geozone and sex",
-                  "G3 - Population by geozone, nationality and sex"];
+//  var mapTypes = ["G1 - Population by geozone, age and sex",
+//                  "G2 - Native-born and foreign-born population by geozone and sex",
+//                  "G3 - Population by geozone, nationality and sex"];
   
-  // use omnivore to load the CSV data
+//  use omnivore to load the CSV data
 //  omnivore.csv(dataG1)
 //    .on('ready', function (e) {
 //      console.log(e.target.toGeoJSON())
@@ -45,11 +39,11 @@
 //    })
 // 
   //=============
-  
-  var fileNr = 2;
-  
-  switch(fileNr) {
-    case 1:
+          var mapTypes = ["G1","G2","G3"];
+  //var mapTypes = 2;
+  console.log(mapTypes);
+  switch(mapTypes[2]) {
+    case "G1":
       omnivore.csv(dataG1)
       .on('ready', function (e) {
       console.log(e.target.toGeoJSON())
@@ -61,7 +55,7 @@
       console.log(e.error[0].message);
     })
         break;
-    case 2:
+    case "G2":
       omnivore.csv(dataG2)
       .on('ready', function (e) {
       console.log(e.target.toGeoJSON())
@@ -73,7 +67,7 @@
       console.log(e.error[0].message);
     })
         break;
-    case 3:
+    case "G3":
       omnivore.csv(dataG3)
       .on('ready', function (e) {
       console.log(e.target.toGeoJSON())
@@ -95,17 +89,26 @@
 //        .append('select')  // append a new select element
 //        .attr('class', 'filter')  // add a class name
 //      //  .on('change', onchange)  // listen for change
+
+        
+//        var mapTypes = ["G1","G2","G3"];
+//        var mapTypes = ["G1 - Population by geozone, age and sex",
+//                        "G2 - Native-born and foreign-born population by geozone and sex",
+//                        "G3 - Population by geozone, nationality and sex"];        
+        
+//        mapTypes.sort();
+//        console.log(mapTypes);
 //        
 //        // select all the options (that don't exist yet)
-//      dropdown.selectAll('option')
-//        .data(mapTypes).enter() // attach our array as data
-//        .append("option") // append a new option element for each data item
-//        .text(function (d) {
-//          return d // use the item as text
-//        })
-//        .attr("value", function (d) {
-//          return d // use the time as value attribute
-//        })
+//        dropdown.selectAll('option')
+//          .data(mapTypes).enter() // attach our array as data
+//          .append("option") // append a new option element for each data item
+//          .text(function (d) {
+//            return d // use the item as text
+//          })
+//          .attr("value", function (d) {
+//            return d // use the time as value attribute
+//          })
   
   //=============
   
@@ -274,7 +277,7 @@
     // and hide it from view initially
     var info = $('#info').hide();
 
-    // since boysLayer is on top, use to detect mouseover events
+    // since maleLayer is on top, use to detect mouseover events
     maleLayer.on('mouseover', function (e) {
       // remove the none class to display and show
       info.show();
@@ -283,10 +286,10 @@
       console.log(props);
       // populate HTML elements with relevant info
       $('#info span').html(props.Geozone);
-      $(".girls span:first-child").html('(categorie ' + curentCategorie + ')');
-      $(".boys span:first-child").html('(categorie ' + curentCategorie + ')');
-      $(".girls span:last-child").html(Number(props['F' + curentCategorie]).toLocaleString());
-      $(".boys span:last-child").html(Number(props['M' + curentCategorie]).toLocaleString());
+      $(".female span:first-child").html('(categorie ' + curentCategorie + ')');
+      $(".male span:first-child").html('(categorie ' + curentCategorie + ')');
+      $(".female span:last-child").html(Number(props['F' + curentCategorie]).toLocaleString());
+      $(".male span:last-child").html(Number(props['M' + curentCategorie]).toLocaleString());
       
       //$(".categorie span:first-child").html(curentCategorie);
 
@@ -299,7 +302,7 @@
         fillOpacity: .6
       });
 
-      // empty arrays for boys and girls values
+      // empty arrays for male and female values
       var femaleValues = [],
           maleValues = [];
 
@@ -309,7 +312,7 @@
         maleValues.push(props['M' + i]);
       } 
             
-      $('.girlspark').sparkline(femaleValues, {
+      $('.femalepark').sparkline(femaleValues, {
           width: '200px',
           height: '30px',
           lineColor: '#f4f731',
@@ -317,7 +320,7 @@
           spotRadius: 0,
           lineWidth: 2
       });
-      $('.boyspark').sparkline(maleValues, {
+      $('.malepark').sparkline(maleValues, {
           width: '200px',
           height: '30px',
           lineColor: '#0655d3',
@@ -375,19 +378,19 @@
         .attr("value", function (d) {
           return d // use the time as value attribute
         });      
-      onchange()
+      //onchange()
        
-      function onchange() {
-        // get the current value from the select element
-        var val = d3.select('select').property('value')
-        // style the display of the facilities
-        facilities.style("display", function (d) {
-          // if it's our default, show them all with inline
-          if (val === "All facilities") return "inline"
-          // otherwise, if each industry type doesn't match the value 
-          if (d.Industry_Type != val) return "none"  // don't display it
-        })
-      }
+//      function onchange() {
+//        // get the current value from the select element
+//        var val = d3.select('select').property('value')
+//        // style the display of the facilities
+//        mapTypes.style("display", function (d) {
+//          // if it's our default, show them all with inline
+//          if (val === "G1") return "inline"
+//          // otherwise, if each industry type doesn't match the value 
+//          if (d.mapTypes != val) return "none"  // don't display it
+//        })
+//      }
     }  
 
   
