@@ -20,107 +20,161 @@
   
   var dataG1 = 'data/G1_Census2011.csv',
       dataG2 = 'data/G2_Census2011.csv',
-      dataG3 = 'data/G3_Census2011.csv',
-      dataG8 = 'data/G8_Census2011.csv'
+      dataG3 = 'data/G3_Census2011.csv'
+      //dataG8 = 'data/geozones_G8.geojson'
  
-//  var mapTypes = ["G1 - Population by geozone, age and sex",
-//                  "G2 - Native-born and foreign-born population by geozone and sex",
-//                  "G3 - Population by geozone, nationality and sex"];
-  
-//  use omnivore to load the CSV data
-//  omnivore.csv(dataG1)
-//    .on('ready', function (e) {
-//      console.log(e.target.toGeoJSON())
-//      drawMap(e.target.toGeoJSON());
-//      drawLegend(e.target.toGeoJSON());
-//    })
-//    .on('error', function (e) {
-//      console.log(e.error[0].message);
-//    })
-// 
-  //=============
-          var mapTypes = ["G1","G2","G3"];
-  //var mapTypes = 2;
-  console.log(mapTypes);
-  switch(mapTypes[2]) {
-    case "G1":
-      omnivore.csv(dataG1)
-      .on('ready', function (e) {
-      console.log(e.target.toGeoJSON())
-      drawMap(e.target.toGeoJSON());
-      drawLegend(e.target.toGeoJSON());
-      addFilter(mapTypes);
-    })
-      .on('error', function (e) {
-      console.log(e.error[0].message);
-    })
-        break;
-    case "G2":
-      omnivore.csv(dataG2)
-      .on('ready', function (e) {
-      console.log(e.target.toGeoJSON())
-      drawMap(e.target.toGeoJSON());
-      drawLegend(e.target.toGeoJSON());
-      addFilter(mapTypes);
-    })
-      .on('error', function (e) {
-      console.log(e.error[0].message);
-    })
-        break;
-    case "G3":
-      omnivore.csv(dataG3)
-      .on('ready', function (e) {
-      console.log(e.target.toGeoJSON())
-      drawMap(e.target.toGeoJSON());
-      drawLegend(e.target.toGeoJSON());
-      addFilter(mapTypes);       
-    })
-      .on('error', function (e) {
-      console.log(e.error[0].message);
-    })
-        break;      
-//    default:
-//        code block
-}
+  var mapTypes = [
+      {name: "G1 - Population by geozone, age and sex", id:"G1"},
+      {name: "G2 - Native-born and foreign-born population by geozone and sex", id :"G2"},
+      {name: "G3 - Population by geozone, nationality and sex", id: "G3"}
+  ]; 
  
   //==============
+   
+  // AJAX call to load county-level data
+  $.getJSON("data/geozones.geojson", function(geozones) {
+    Papa.parse('data/G8_Census2011.csv', {
+        download: true,
+        header: true,
+        complete: function(dataG8) {
+            //processData(geozones, dataG8);
+          console.log(dataG8);
+        }
+    });
+    console.log(geozones);    
+	  choroplethMap(geozones); // draw the map using GeoJSON data
+  }); 
   
-//        var dropdown = d3.select('#map')
-//        .append('select')  // append a new select element
-//        .attr('class', 'filter')  // add a class name
-//      //  .on('change', onchange)  // listen for change
+  //==============
+  
+  
+  // use omnivore to load the CSV data
+  omnivore.csv(dataG1)
+    .on('ready', function (e) {
+      //console.log(e.target.toGeoJSON())
+      drawMap(e.target.toGeoJSON());
+      drawLegend(e.target.toGeoJSON());
+    //addFilter(mapTypes);
+    })
+    .on('error', function (e) {
+      console.log(e.error[0].message);
+    })
+  
+  
+ // function addFilter(mapTypes) {
+    var dropdown = d3.select('#map')
+        .append('select')  // append a new select element
+        .attr('class', 'filter')  // add a class name
+        .attr('id','dropd')
+        .on('change', function() {
+        var binding = document.getElementById('dropd').value;
+              console.log(binding);
+              setMap(binding,mapTypes);
+        });
 
-        
-//        var mapTypes = ["G1","G2","G3"];
-//        var mapTypes = ["G1 - Population by geozone, age and sex",
-//                        "G2 - Native-born and foreign-born population by geozone and sex",
-//                        "G3 - Population by geozone, nationality and sex"];        
-        
-//        mapTypes.sort();
-//        console.log(mapTypes);
-//        
-//        // select all the options (that don't exist yet)
-//        dropdown.selectAll('option')
-//          .data(mapTypes).enter() // attach our array as data
-//          .append("option") // append a new option element for each data item
-//          .text(function (d) {
-//            return d // use the item as text
-//          })
-//          .attr("value", function (d) {
-//            return d // use the time as value attribute
-//          })
+      mapTypes.sort();
+      //console.log(mapTypes);
+
+      // select all the options (that don't exist yet)
+      dropdown.selectAll('option')
+          .data(mapTypes, function (d) {return d.id ? d.name : this.id; } ).enter() // attach our array as data
+          .append("option") // append a new option element for each data item
+          .text(function (d) {
+            return d.name // use the item as text
+          })
+          .attr("value", function (d) {
+            return d.id // use the time as value attribute
+          });
+// }    
   
-  //=============
+  function choroplethMap(data) {
+			// create Leaflet data layer and add to map
+			var dataLayer = L.geoJson(data, {
+				style: function(feature) {
+					// style counties with initial default path options
+					return {
+						color: '#dddddd',
+						weight: 2,
+						fillOpacity: 1,
+						fillColor: '#1f78b4'
+					};
+				},
+				onEachFeature: function(feature, layer) {
+					// when mousing over a layer
+					layer.on('mouseover', function() {
+						// change the stroke color and bring that element to the front
+						layer.setStyle({
+							color: '#ff6e00'
+						}).bringToFront();
+					});
+					// on mousing off layer
+					layer.on('mouseout', function() {
+						// reset the layer style to its original stroke color
+						layer.setStyle({
+							color: '#dddddd'
+						});
+					});
+				}
+			}).addTo(map);
+			// fit the map's bounds and zoom level using the dataLayer extent
+			map.fitBounds(dataLayer.getBounds(), {
+				paddingTopLeft: [25, 25] // push off top left for sake of legend
+			});      
+      //addUi(dataLayer); // add the UI controls
+      //updateMap(dataLayer) // update the map with the current data attribute
+		}  
   
-  L.control.layers({
-      'G1': omnivore.csv('data/G1_Census2011.csv'),
-      'G2': omnivore.csv('data/G2_Census2011.csv'),
-      'G3': omnivore.csv('data/G3_Census2011.csv')
-    }, {
-      'Mapbox Light': omnivore.geojson('data/geozones_G8.geojson')
-  }).addTo(map);
+  function setMap(g){
+      switch(g) {
+          case "G1":
+              omnivore.csv(dataG1)
+                  .on('ready', function (e) {
+                      console.log(e.target.toGeoJSON())
+                       drawMap(e.target.toGeoJSON());
+                       drawLegend(e.target.toGeoJSON());
+                  })
+                  .on('error', function (e) {
+                      console.log(e.error[0].message);
+                  })
+              break;
+          case "G2":
+              omnivore.csv(dataG2)
+                  .on('ready', function (e) {
+                      console.log(e.target.toGeoJSON())
+                      drawMap(e.target.toGeoJSON());
+                      drawLegend(e.target.toGeoJSON());
+                  })
+                  .on('error', function (e) {
+                      console.log(e.error[0].message);
+                  })
+              break;
+          case "G3":
+              omnivore.csv(dataG3)
+                  .on('ready', function (e) {
+                      console.log(e.target.toGeoJSON())
+                      drawMap(e.target.toGeoJSON());
+                      drawLegend(e.target.toGeoJSON());
+                  })
+                  .on('error', function (e) {
+                      console.log(e.error[0].message);
+                  })
+              break;
+          default:
+//        code block
+      }
+  }
 
   function drawMap(data) {
+    
+     var count = 0;
+      map.eachLayer(function (layer) {
+          if (count == 0){count++;}
+          else{
+              map.removeLayer(layer);
+              count ++;
+          }
+      });    
+    
     var options = {
       pointToLayer: function (feature, ll) {
         return L.circleMarker(ll, {
@@ -130,8 +184,9 @@
         })
       }    
     }
-    console.log(data);
-    // create 2 separate layers from GeoJSON data
+    //console.log(data);
+    
+    // create 2 separate data layers    
     var femaleLayer = L.geoJson(data, options).addTo(map),
         maleLayer = L.geoJson(data, options).addTo(map);
     // fit the bounds of the map to one of the layers
@@ -145,9 +200,8 @@
     resizeCircles(femaleLayer, maleLayer, 1);
     
     sequenceUI(femaleLayer, maleLayer);
-    
-    
-    
+
+        
   } // end drawMap()
   
   function calcRadius(val) {
@@ -166,6 +220,7 @@
     })
     // update the hover window with current categorie's
     retrieveInfo(maleLayer, curentCategorie);
+    
   }
   
   function sequenceUI(femaleLayer, maleLayer) {
@@ -359,41 +414,6 @@
             });
         }
     });
-  }
-    
-  function addFilter(mapTypes1) {
-      // select the map element
-      var dropdown = d3.select('#map')
-        .append('select')  // append a new select element
-        .attr('class', 'filter')  // add a class name
-        //.on('change', onchange)  // listen for change
-      
-      // select all the options (that don't exist yet)
-      dropdown.selectAll('option')
-        .data(mapTypes).enter() // attach our array as data
-        .append("option") // append a new option element for each data item
-        .text(function (d) {
-          return d // use the item as text
-        })
-        .attr("value", function (d) {
-          return d // use the time as value attribute
-        });      
-      //onchange()
-       
-//      function onchange() {
-//        // get the current value from the select element
-//        var val = d3.select('select').property('value')
-//        // style the display of the facilities
-//        mapTypes.style("display", function (d) {
-//          // if it's our default, show them all with inline
-//          if (val === "G1") return "inline"
-//          // otherwise, if each industry type doesn't match the value 
-//          if (d.mapTypes != val) return "none"  // don't display it
-//        })
-//      }
-    }  
+  }  
 
-  
-  
-  
 })();
