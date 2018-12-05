@@ -49,16 +49,16 @@
   
   
   // use omnivore to load the CSV data
-  omnivore.csv(dataG1)
-    .on('ready', function (e) {
-      //console.log(e.target.toGeoJSON())
-      drawMap(e.target.toGeoJSON());
-      drawLegend(e.target.toGeoJSON());
-    //addFilter(mapTypes);
-    })
-    .on('error', function (e) {
-      console.log(e.error[0].message);
-    })
+//  omnivore.csv(dataG1)
+//    .on('ready', function (e) {
+//      //console.log(e.target.toGeoJSON())
+//      drawMap(e.target.toGeoJSON());
+//      drawLegend(e.target.toGeoJSON());
+//    //addFilter(mapTypes);
+//    })
+//    .on('error', function (e) {
+//      console.log(e.error[0].message);
+//    })
   
   
  // function addFilter(mapTypes) {
@@ -105,7 +105,7 @@
 						// change the stroke color and bring that element to the front
 						layer.setStyle({
 							color: '#ff6e00'
-						}).bringToFront();
+						})
 					});
 					// on mousing off layer
 					layer.on('mouseout', function() {
@@ -116,6 +116,7 @@
 					});
 				}
 			}).addTo(map);
+    dataLayer.bringToFront();
 			// fit the map's bounds and zoom level using the dataLayer extent
 			map.fitBounds(dataLayer.getBounds(), {
 				paddingTopLeft: [25, 25] // push off top left for sake of legend
@@ -166,14 +167,14 @@
 
   function drawMap(data) {
     
-     var count = 0;
-      map.eachLayer(function (layer) {
-          if (count == 0){count++;}
-          else{
-              map.removeLayer(layer);
-              count ++;
-          }
-      });    
+//     var count = 0;
+//      map.eachLayer(function (layer) {
+//          if (count == 0){count++;}
+//          else{
+//              map.removeLayer(layer);
+//              count ++;
+//          }
+//      });    
     
     var options = {
       pointToLayer: function (feature, ll) {
