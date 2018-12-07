@@ -102,7 +102,7 @@
             });
           }
       }).addTo(map);      
-      //dataLayer.bringToFront();
+      dataLayer.bringToFront();
 			// fit the map's bounds and zoom level using the dataLayer extent
 			map.fitBounds(dataLayer.getBounds(), {
 				paddingTopLeft: [25, 25] // push off top left for sake of legend
@@ -390,7 +390,7 @@
           width: '200px',
           height: '30px',
           lineColor: '#00915e',
-          fillColor: '#fbfcbd',
+          fillColor: '#e6fff5',
           spotRadius: 0,
           lineWidth: 2
       });
@@ -398,7 +398,7 @@
           width: '200px',
           height: '30px',
           lineColor: '#0655d3',
-          fillColor: '#9e9bf7',
+          fillColor: '#ccddff',
           spotRadius: 0,
           lineWidth: 2
       });      
