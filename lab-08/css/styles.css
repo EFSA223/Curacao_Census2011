@@ -34,7 +34,19 @@ hr.small, hr.large {
 }
 
 #info,
+#slider,
+#legend,
+#categorie{  
+  display: none;
+}
+
+#info,
 #categorie,
 .filter {
   z-index: 1000;
+}
+
+.bg-white,
+.bg-yellow-faint{
+    padding-top: 7px;
 }
