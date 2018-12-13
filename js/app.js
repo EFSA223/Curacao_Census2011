@@ -116,8 +116,8 @@
               omnivore.csv(dataG1)
                   .on('ready', function (e) {
                       console.log(e.target.toGeoJSON())
-                       drawMap(e.target.toGeoJSON());
-                       drawLegend(e.target.toGeoJSON());
+                      drawMap(e.target.toGeoJSON());
+                      drawLegend(e.target.toGeoJSON());
                   })
                   .on('error', function (e) {
                       console.log(e.error[0].message);
@@ -342,8 +342,8 @@
     });
 
     // insert a couple hr elements and use to connect value label to top of each circle
-    $("<hr class='large'>").insertBefore(".legend-large-label")
-    $("<hr class='small'>").insertBefore(".legend-small-label").css('top', largeDiameter - smallDiameter - 8); 
+//    $("<hr class='large'>").insertBefore(".legend-large-label")
+//    $("<hr class='small'>").insertBefore(".legend-small-label").css('top', largeDiameter - smallDiameter - 8); 
   }
   
   function retrieveInfo(maleLayer, curentCategorie) {
