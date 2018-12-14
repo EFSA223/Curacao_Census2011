@@ -11,7 +11,7 @@
 
   var accessToken = 'pk.eyJ1IjoiZWYtc2FtYm8iLCJhIjoiY2pvMjZ3ZW00MGU2MzNwcW56aWRsdjBlbiJ9.yaVVbJMunXI_jof-4qb21w'
 
-  var basemap=L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + accessToken, {
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + accessToken, {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 15,
     id: 'mapbox.streets',
@@ -32,7 +32,7 @@
 
   // AJAX call to load county-level data
     $.getJSON("data/geozones_G8.geojson", function(geozones) {
-    console.log('after: ', geozones);    
+  
 	  choroplethMap(geozones); // draw the map using GeoJSON data
   }); 
 
@@ -43,7 +43,7 @@
       .attr('id','dropd')
       .on('change', function() {
       var binding = document.getElementById('dropd').value;
-            console.log(binding);
+        
             setMap(binding);
       });
 
@@ -75,19 +75,19 @@
           },
           onEachFeature: function(feature, layer) {
             if(feature.properties) {
-              console.log();
+         
               var content=feature.properties.G8_Census2011_csv_Pop_density_km2;
                 rates.push(Number(content));
               var breaks=chroma.limits(rates,'q',7);
-                console.log(rates);
+               
               var colorize=chroma.scale(chroma.brewer.OrRd).classes(breaks).mode('lab');
-                console.log(colorize);
+              
                 layer.setStyle({fillColor:colorize(Number(content))});    
                 layer.bindPopup("Population density per zone: "+content.toString());
             }
             // when mousing over a layer
             layer.on('mouseover', function() {
-              map.closePopup();
+              map.closePopup(); 
               // change the stroke color and bring that element to the front
               layer.setStyle({
                 color: '#ff6e00'
@@ -115,34 +115,34 @@
          case "G1":
               omnivore.csv(dataG1)
                   .on('ready', function (e) {
-                      console.log(e.target.toGeoJSON())
+                  
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
                   })
                   .on('error', function (e) {
-                      console.log(e.error[0].message);
+               
                   })
               break;
           case "G2":
               omnivore.csv(dataG2)
                   .on('ready', function (e) {
-                      console.log(e.target.toGeoJSON())
+                   
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
                   })
                   .on('error', function (e) {
-                      console.log(e.error[0].message);
+                  
                   })
               break;
           case "G3":
               omnivore.csv(dataG3)
                   .on('ready', function (e) {
-                      console.log(e.target.toGeoJSON())
+                   
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
                   })
                   .on('error', function (e) {
-                      console.log(e.error[0].message);
+                    
                   })
               break;
           default:
@@ -151,7 +151,7 @@
   }
 
   function drawMap(data) {
-    console.log(data);
+
     // Remove only point layer
     map.eachLayer(function (layer) {    
          var n=layer.feature;
@@ -159,7 +159,7 @@
              {            
                if(n[i]["type"]=="Point")
                    {
-                      console.log(n[i]["type"]);
+                 
                       map.removeLayer(layer);
                    }
              }
@@ -230,19 +230,19 @@
     $('#slider input[type=range]').on('input', function () {
       // current value of slider is current categorie level
       var curentCategorie = this.value;
-      console.log(curentCategorie);
+
       
       // resize the circles with updated categorie level
       resizeCircles(femaleLayer, maleLayer, curentCategorie);
 
         switch(curentCategorie){
             case null:
-               console.log(curentCategorie);
+          
                curentCategorie=curentCategorie+" : age 0-14" ;    
                $(".categorie span:first-child").html(curentCategorie);
                     break;
             case "1":
-               console.log(curentCategorie);
+             
                curentCategorie=curentCategorie+" : age 0-14" ;    
                $(".categorie span:first-child").html(curentCategorie);
                     break;
@@ -358,7 +358,7 @@
       
       // access properties of target layer
       var props = e.layer.feature.properties;
-      console.log(props);
+
       
       // populate HTML elements with relevant info
       $('#info span').html(props.Geozone);
@@ -367,10 +367,6 @@
       $(".female span:last-child").html(Number(props['F' + curentCategorie]).toLocaleString());
       $(".male span:last-child").html(Number(props['M' + curentCategorie]).toLocaleString());
 
-      console.log(props.Geozone);
-      console.log(curentCategorie);
-      console.log(Number(props['M' + curentCategorie]).toLocaleString())
-      
       // raise opacity level as visual affordance
       e.layer.setStyle({
         fillOpacity: .6
