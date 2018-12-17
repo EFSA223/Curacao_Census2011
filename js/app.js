@@ -21,7 +21,6 @@
   var dataG1 = 'data/G1_Census2011.csv',
       dataG2 = 'data/G2_Census2011.csv',
       dataG3 = 'data/G3_Census2011.csv'
-  //    dataG8 = 'data/geozones11_G8.geojson'
  
   var mapTypes = [
       {name: "Select a map", id: "select"},
@@ -130,6 +129,10 @@
                       //console.log(e.target.toGeoJSON())
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
+                      document.getElementById("catlbl1").innerHTML="ages 0 - 14";
+                      document.getElementById("catlbl2").innerHTML="ages 15 - 64";
+                      document.getElementById("catlbl3").innerHTML="ages 65+";
+                      document.getElementById("catlbl4").innerHTML="All ages";                
                   })
                   .on('error', function (e) {
                       console.log(e.error[0].message);
@@ -141,6 +144,10 @@
                       //console.log(e.target.toGeoJSON())
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
+                      document.getElementById("catlbl1").innerHTML="Curacao-born";
+                      document.getElementById("catlbl2").innerHTML="Foreign-born";
+                      document.getElementById("catlbl3").innerHTML="Not repported";
+                      document.getElementById("catlbl4").innerHTML="Total";
                   })
                   .on('error', function (e) {
                       console.log(e.error[0].message);
@@ -152,6 +159,10 @@
                       //console.log(e.target.toGeoJSON())
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
+                      document.getElementById("catlbl1").innerHTML="Dutch nationality";
+                      document.getElementById("catlbl2").innerHTML="Other nationality";
+                      document.getElementById("catlbl3").innerHTML="Not repported";
+                      document.getElementById("catlbl4").innerHTML="Total";
                   })
                   .on('error', function (e) {
                       console.log(e.error[0].message);

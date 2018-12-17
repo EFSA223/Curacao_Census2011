@@ -48,7 +48,7 @@
       
       <!-- ui categorie panel -->
       <div id='categorie' class='py6 px12 bg-yellow-faint border border--gray-light round absolute bottom w2 mb60 ml12'>
-        <p class='categorie'>Categorie <span>1 : age 0-14</span> <span class='txt-l txt-bold'></span></p>
+        <p class='categorie'>Categorie <span>1 :</span> <span class='txt-l txt-bold'></span></p>
       </div>
     </div>  
        
@@ -69,34 +69,30 @@
   
   <!-- ui radio buttons -->
   <div id='radiobtn' class='radiowrapper bg-yellow-faint border--gray-light round-ml px12'>
+    <label>
+      <b>CATEGORY:</b>
+    </label>
     <label class='radio-container bg-yellow-faint px12'>
       <input id="check" name='radio-basic' type='radio' value="1" checked>
       <div class='radio mr6'></div>
-      ages 0 - 14
+      <span id='catlbl1'></span>
     </label>
     <label class='radio-container px12'>
       <input name='radio-basic' type='radio' value="2">
       <div class='radio mr6'></div>
-      ages 15 - 64
+      <span id='catlbl2'></span>
     </label>
       <label class='radio-container px12'>
       <input name='radio-basic' type='radio' value="3">
       <div class='radio mr6'></div>
-      ages 65+
+      <span id='catlbl3'></span>
     </label>
     <label class='radio-container px12'>
       <input name='radio-basic' type='radio' value="4">
       <div class='radio mr6'></div>
-      All ages
+      <span id='catlbl4'></span>
     </label>
   </div>  
-   
-  <!-- ui slider -->
-<!--
-  <div id='slider' class='range w240 bg-yellow-faint border--gray-light round-ml px12'>
-    <input type='range' min="1" , max="4" , value="1" , step="1"/>
-  </div>
--->
 
   <!-- legend -->
   <div id='legend' class='bg-yellow-faint round px12 py12 relative'>
@@ -109,11 +105,7 @@
     </div>
   </div>
   
-  <script src="https://d3js.org/d3.v5.js"></script>
-<!--
-  <script src="https://unpkg.com/topojson@3"></script>
-  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
---> 
+  <script src="https://d3js.org/d3.v5.js"></script> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script async defer src="https://api.mapbox.com/mapbox-assembly/v0.21.2/assembly.js"></script>
