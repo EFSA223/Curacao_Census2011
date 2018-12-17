@@ -20,20 +20,13 @@
           <p>This map provides some demography data of Curaçao. Demographic changes are described and illustrated in order to draw a comparative image of the population of Curaçao.</p><br>
           <p>Population by geozones:</p>
           <ul>
-            <li>1. Density map per square meter,</li>
+            <li>1. Density map per square kilometer,</li>
             <li>2. Age and sex,</li>
             <li>3. Native- and foreignborn and sex</li>
             <li>4. Nationality and sex.</li>
-          </ul>  
-          
+          </ul>            
           <h2 class='txt-xl mt18 mb12'>Census 2011</h2>
           <img src="graphics/Senso2011_Logo.png">
-<!--
-          <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-             Sed posuere consectetur est
-            at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum
-            nulla sed consectetur.</p>
--->
         </div>
         <footer class='px12 py12 bg-gray-faint txt-s'>
           <ul>
@@ -41,10 +34,9 @@
               <a class='link' href='https://www.cbs.cw/website/statistics-by-subject_3406/'>data</a>
             </li>
             <li>Map authored by
-              <a class='link' href='#'>Etienne Sambo</a>
+              <a class='link' href='https://efsa223.github.io/'>Etienne Sambo</a>
             </li>
             <li>Presentation
-<!--              <a class='link' href='https://drive.google.com/open?id=1oY7UsDVL1D0V5cXmQNW0WgAUwGrrGI1N'>video</a>-->
               <a class='link' href='https://drive.google.com/file/d/1oY7UsDVL1D0V5cXmQNW0WgAUwGrrGI1N/view?usp=sharing'>video</a>
             </li> 
           </ul>
@@ -74,15 +66,41 @@
     </div>
     
   </div>
+  
+  <!-- ui radio buttons -->
+  <div id='radiobtn' class='radiowrapper bg-yellow-faint border--gray-light round-ml px12'>
+    <label class='radio-container bg-yellow-faint px12'>
+      <input id="check" name='radio-basic' type='radio' value="1" checked>
+      <div class='radio mr6'></div>
+      ages 0 - 14
+    </label>
+    <label class='radio-container px12'>
+      <input name='radio-basic' type='radio' value="2">
+      <div class='radio mr6'></div>
+      ages 15 - 64
+    </label>
+      <label class='radio-container px12'>
+      <input name='radio-basic' type='radio' value="3">
+      <div class='radio mr6'></div>
+      ages 65+
+    </label>
+    <label class='radio-container px12'>
+      <input name='radio-basic' type='radio' value="4">
+      <div class='radio mr6'></div>
+      All ages
+    </label>
+  </div>  
    
   <!-- ui slider -->
+<!--
   <div id='slider' class='range w240 bg-yellow-faint border--gray-light round-ml px12'>
     <input type='range' min="1" , max="4" , value="1" , step="1"/>
   </div>
+-->
 
   <!-- legend -->
   <div id='legend' class='bg-yellow-faint round px12 py12 relative'>
-    <h3 class='txt-bold mb12 w180'>Female and Male per geozone</h3>
+    <h3 class='txt-bold mb12 w180'>Female and Male</h3>
     <div class='legend-circles relative w180'>
       <div class="legend-large border border--gray-light absolute"></div>
       <div class="legend-small border border--gray-light absolute"></div>

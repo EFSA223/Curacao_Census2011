@@ -29,10 +29,13 @@
       {name: "G2 - Native-born and foreign-born population by geozone and sex", id :"G2"},
       {name: "G3 - Population by geozone, nationality and sex", id: "G3"}
   ]; 
+  
+  var colorizeA;
+  var breaksA;
 
   // AJAX call to load county-level data
     $.getJSON("data/geozones_G8.geojson", function(geozones) {
-    console.log('after: ', geozones);    
+    //console.log('after: ', geozones);    
 	  choroplethMap(geozones); // draw the map using GeoJSON data
   }); 
 
@@ -43,8 +46,9 @@
       .attr('id','dropd')
       .on('change', function() {
       var binding = document.getElementById('dropd').value;
-            console.log(binding);
-            setMap(binding);
+        document.getElementById("check").checked=true;
+        //console.log(binding);
+        setMap(binding);
       });
 
   mapTypes.sort();
@@ -79,18 +83,22 @@
               var content=feature.properties.G8_Census2011_csv_Pop_density_km2;
                 rates.push(Number(content));
               var breaks=chroma.limits(rates,'q',7);
-                console.log(rates);
+                //console.log(rates);
               var colorize=chroma.scale(chroma.brewer.OrRd).classes(breaks).mode('lab');
-                console.log(colorize);
+                //console.log(colorize);
                 layer.setStyle({fillColor:colorize(Number(content))});    
-                layer.bindPopup("Population density per zone: "+content.toString());
-            }
+                layer.bindPopup("Population density per zone: "+content.toString()+" / km²");
+              breaksA = breaks;
+              colorizeA = colorize;
+            };
+            //drawLegendA(breaks, colorize);
             // when mousing over a layer
             layer.on('mouseover', function() {
               map.closePopup();
               // change the stroke color and bring that element to the front
               layer.setStyle({
-                color: '#ff6e00'
+                color: '#ff6e00',
+                opacity:0.5
               })
             });
             // on mousing off layer
@@ -100,9 +108,13 @@
                 color: '#dddddd'
               });
             });
+            //console.log(breaks);
           }
+        
       }).addTo(map);      
       dataLayer.bringToFront();
+    drawLegendA(breaksA, colorizeA);
+    
 			// fit the map's bounds and zoom level using the dataLayer extent
 			map.fitBounds(dataLayer.getBounds(), {
 				paddingTopLeft: [25, 25] // push off top left for sake of legend
@@ -115,7 +127,7 @@
          case "G1":
               omnivore.csv(dataG1)
                   .on('ready', function (e) {
-                      console.log(e.target.toGeoJSON())
+                      //console.log(e.target.toGeoJSON())
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
                   })
@@ -126,7 +138,7 @@
           case "G2":
               omnivore.csv(dataG2)
                   .on('ready', function (e) {
-                      console.log(e.target.toGeoJSON())
+                      //console.log(e.target.toGeoJSON())
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
                   })
@@ -137,7 +149,7 @@
           case "G3":
               omnivore.csv(dataG3)
                   .on('ready', function (e) {
-                      console.log(e.target.toGeoJSON())
+                      //console.log(e.target.toGeoJSON())
                       drawMap(e.target.toGeoJSON());
                       drawLegend(e.target.toGeoJSON());
                   })
@@ -151,7 +163,7 @@
   }
 
   function drawMap(data) {
-    console.log(data);
+    //console.log(data);
     // Remove only point layer
     map.eachLayer(function (layer) {    
          var n=layer.feature;
@@ -159,7 +171,7 @@
              {            
                if(n[i]["type"]=="Point")
                    {
-                      console.log(n[i]["type"]);
+                      //console.log(n[i]["type"]);
                       map.removeLayer(layer);
                    }
              }
@@ -218,50 +230,71 @@
       position: 'bottomleft'
     });
     sliderControl.onAdd = function (map) {     
-      var controls = L.DomUtil.get("slider");
+      var controls = L.DomUtil.get("radiobtn");
         L.DomEvent.disableScrollPropagation(controls);
         L.DomEvent.disableClickPropagation(controls);
-        document.getElementById("slider").style.display="block";
+        document.getElementById("radiobtn").style.display="block";
         document.getElementById("categorie").style.display="block";    
         return controls;
     }
     
     //select the slider's input and listen for change
-    $('#slider input[type=range]').on('input', function () {
+    $('#radiobtn input[type=radio]').on('change', function () {
       // current value of slider is current categorie level
       var curentCategorie = this.value;
-      console.log(curentCategorie);
+      //console.log(curentCategorie);
       
       // resize the circles with updated categorie level
       resizeCircles(femaleLayer, maleLayer, curentCategorie);
 
         switch(curentCategorie){
             case null:
-               console.log(curentCategorie);
-               curentCategorie=curentCategorie+" : age 0-14" ;    
+               //console.log(curentCategorie);
+               //curentCategorie=curentCategorie+" : age 0-14" ;    
                $(".categorie span:first-child").html(curentCategorie);
                     break;
             case "1":
-               console.log(curentCategorie);
-               curentCategorie=curentCategorie+" : age 0-14" ;    
+               //console.log(curentCategorie);
+               //curentCategorie=curentCategorie+" : age 0-14" ;    
                $(".categorie span:first-child").html(curentCategorie);
                     break;
             case "2":
-               curentCategorie=curentCategorie+" : age 15-64";     
+               //curentCategorie=curentCategorie+" : age 15-64";     
                $(".categorie span:first-child").html(curentCategorie);
                     break;
             case "3":
-               curentCategorie=curentCategorie+" : age 65+";     
+               //curentCategorie=curentCategorie+" : age 65+";     
                $(".categorie span:first-child").html(curentCategorie);
                     break;
             case "4": "TOTAAL"
-               curentCategorie=curentCategorie+" : All ages";
+               //curentCategorie=curentCategorie+" : All ages";
                $(".categorie span:first-child").html(curentCategorie);
                     break;               
         }        
     });
     sliderControl.addTo(map);  
   }
+  
+  function drawLegendA(breaks, colorize) {          
+    var legendControl = L.control({
+        position: 'bottomright'
+    });
+    legendControl.onAdd = function(map) {
+        var legendA = L.DomUtil.create('div', 'legendA');
+        return legendA;
+    };
+    legendControl.addTo(map);
+
+    var legendA = $('.legendA').html("<h3>Population density km²</h3><ul>");
+    for (var i = 0; i < breaks.length - 1; i++) {
+        var color = colorize(breaks[i], breaks);
+        var classRange = '<li><span style="background:' + color + '"></span> ' +
+            breaks[i].toLocaleString() + ' &mdash; ' +
+            breaks[i + 1].toLocaleString() + '</li>'
+        $('.legendA ul').append(classRange);
+    }
+    legendA.append("</ul>");          
+  } // end drawLegendA()
   
   function drawLegend(data) {    
     // create Leaflet control for the legend
@@ -332,13 +365,13 @@
     // adjust the position of the large based on size of circle
     $(".legend-large-label").css({
         'top': -11,
-        'left': largeDiameter + 30,
+        'left': largeDiameter + 1,
     });
 
     // adjust the position of the large based on size of circle
     $(".legend-small-label").css({
         'top': smallDiameter - 11,
-        'left': largeDiameter + 30
+        'left': largeDiameter + 1
     });
 
     // insert a couple hr elements and use to connect value label to top of each circle
@@ -358,7 +391,7 @@
       
       // access properties of target layer
       var props = e.layer.feature.properties;
-      console.log(props);
+      //console.log(props);
       
       // populate HTML elements with relevant info
       $('#info span').html(props.Geozone);
@@ -367,9 +400,9 @@
       $(".female span:last-child").html(Number(props['F' + curentCategorie]).toLocaleString());
       $(".male span:last-child").html(Number(props['M' + curentCategorie]).toLocaleString());
 
-      console.log(props.Geozone);
-      console.log(curentCategorie);
-      console.log(Number(props['M' + curentCategorie]).toLocaleString())
+      //console.log(props.Geozone);
+      //console.log(curentCategorie);
+      //console.log(Number(props['M' + curentCategorie]).toLocaleString())
       
       // raise opacity level as visual affordance
       e.layer.setStyle({
